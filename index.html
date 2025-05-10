@@ -318,22 +318,22 @@
             document.getElementById('spinner').style.display = 'block';
             
             try {
+                // Append black and white outline instruction to the prompt
+                const enhancedPrompt = prompt + ", black and white outline drawing, pen and ink style, no color, simple line art";
+                
                 // Generate the image
                 const result = await websim.imageGen({
-                    prompt: prompt,
+                    prompt: enhancedPrompt,
                     aspect_ratio: "3:4",
                 });
                 
                 const imageUrl = result.url;
                 
-                // Process the image to create an outline version
-                const outlineImageUrl = await createOutlineImage(imageUrl);
-                
                 // Store the image URL
-                cardImages[page] = outlineImageUrl;
+                cardImages[page] = imageUrl;
                 
                 // Update the preview
-                updatePreview(page, outlineImageUrl);
+                updatePreview(page, imageUrl);
                 
                 // If it's the inside right page, add the message
                 if (page === 'inside-right') {
@@ -346,57 +346,6 @@
                 // Hide loading spinner
                 document.getElementById('spinner').style.display = 'none';
             }
-        }
-
-        // Function to create an outline version of the image
-        async function createOutlineImage(imageUrl) {
-            return new Promise((resolve, reject) => {
-                const img = new Image();
-                img.crossOrigin = "Anonymous";
-                img.onload = function() {
-                    const canvas = document.createElement('canvas');
-                    const ctx = canvas.getContext('2d');
-                    
-                    // Set canvas dimensions to match the image
-                    canvas.width = img.width;
-                    canvas.height = img.height;
-                    
-                    // Draw the original image
-                    ctx.drawImage(img, 0, 0);
-                    
-                    // Get image data
-                    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-                    const data = imageData.data;
-                    
-                    // Convert to grayscale and increase contrast for outline effect
-                    for (let i = 0; i < data.length; i += 4) {
-                        // Convert to grayscale
-                        const avg = (data[i] + data[i + 1] + data[i + 2]) / 3;
-                        
-                        // Apply edge detection / outline effect
-                        // This is a simple version - just making it black and white with high contrast
-                        const value = avg > 190 ? 255 : 0;
-                        
-                        // Set RGB values to the same value for grayscale
-                        data[i] = value;     // R
-                        data[i + 1] = value; // G
-                        data[i + 2] = value; // B
-                        // Alpha channel remains unchanged
-                    }
-                    
-                    // Put the modified image data back on the canvas
-                    ctx.putImageData(imageData, 0, 0);
-                    
-                    // Convert canvas to data URL
-                    resolve(canvas.toDataURL('image/png'));
-                };
-                
-                img.onerror = function() {
-                    reject(new Error('Failed to load image'));
-                };
-                
-                img.src = imageUrl;
-            });
         }
 
         // Function to update the preview with the generated image
@@ -463,4 +412,3 @@
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js/v8c78df7c7c0f484497ecbca7046644da1771523124516" integrity="sha512-8DS7rgIrAmghBFwoOTujcf6D9rXvH8xm8JQ1Ja01h9QX8EzXldiszufYa4IFfKdLUKTTrnSFXLDkUEOTrZQ8Qg==" data-cf-beacon='{"version":"2024.11.0","token":"4c6229722a6346bc8eb5cb0e5eae5d41","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
 </body>
 </html>
-
