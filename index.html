@@ -122,12 +122,14 @@
             object-fit: contain; 
         }
 
-        .card-page .text-overlay {
+        .text-overlay { 
             position: absolute;
+            z-index: 10; 
             text-align: center;
             text-shadow: 0 0 3px white, 0 0 3px white, 0 0 3px white, 0 0 3px white;
             box-sizing: border-box;
             padding: 5px;
+            overflow: hidden; 
         }
 
         .buttons-container {
@@ -227,10 +229,10 @@
             }
             
             .card-section .text-overlay { 
-                 visibility: visible;
-                 border: none !important;
-                 resize: none !important;
-                 cursor: default !important;
+                 visibility: visible !important; 
+                 border: none !important; 
+                 resize: none !important; 
+                 cursor: default !important; 
             }
 
 
