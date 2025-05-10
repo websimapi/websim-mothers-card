@@ -245,7 +245,11 @@
         <div id="inside-left" class="content-panel">
             <div class="form-group">
                 <label for="inside-left-prompt">Describe what you'd like on the inside right page:</label>
-                <textarea id="inside-left-prompt" placeholder="E.g., A mother and child holding hands">A mother and child holding hands walking through a garden</textarea>
+                <textarea id="inside-left-prompt" placeholder="E.g., Hearts and flowers frame">Hearts and flowers frame around a blank space for writing</textarea>
+            </div>
+            <div class="form-group">
+                <label for="message">Your message to mom:</label>
+                <textarea id="message" placeholder="Write your heartfelt message here...">Dear Mom, Thank you for your endless love and support. Happy Mother's Day!</textarea>
             </div>
             <button onclick="generateImage('inside-left')">Generate Inside Right Page</button>
         </div>
@@ -253,11 +257,7 @@
         <div id="inside-right" class="content-panel">
             <div class="form-group">
                 <label for="inside-right-prompt">Describe what you'd like on the inside left page:</label>
-                <textarea id="inside-right-prompt" placeholder="E.g., Hearts and flowers frame">Hearts and flowers frame around a blank space for writing</textarea>
-            </div>
-            <div class="form-group">
-                <label for="message">Your message to mom:</label>
-                <textarea id="message" placeholder="Write your heartfelt message here...">Dear Mom, Thank you for your endless love and support. Happy Mother's Day!</textarea>
+                <textarea id="inside-right-prompt" placeholder="E.g., A mother and child holding hands">A mother and child holding hands walking through a garden</textarea>
             </div>
             <button onclick="generateImage('inside-right')">Generate Inside Left Page</button>
         </div>
@@ -277,10 +277,10 @@
                 <p style="text-align: center; color: #999;">Your front cover will appear here</p>
             </div>
             <div class="card-page" id="inside-left-preview">
-                <p style="text-align: center; color: #999;">Your inside left page will appear here</p>
+                <p style="text-align: center; color: #999;">Your inside right page will appear here</p>
             </div>
             <div class="card-page" id="inside-right-preview">
-                <p style="text-align: center; color: #999;">Your inside right page will appear here</p>
+                <p style="text-align: center; color: #999;">Your inside left page will appear here</p>
             </div>
             <div class="card-page" id="back-preview">
                 <p style="text-align: center; color: #999;">Your back cover will appear here</p>
@@ -373,7 +373,7 @@
                 updatePreview(page, imageUrl);
                 
                 // If it's the inside right page, add the message
-                if (page === 'inside-right') {
+                if (page === 'inside-left') {
                     addMessageToImage(page);
                 }
             } catch (error) {
@@ -397,10 +397,10 @@
 
         // Function to add the message to the inside right page
         function addMessageToImage(page) {
-            if (page === 'inside-right') {
+            if (page === 'inside-left') {
                 const message = document.getElementById('message').value;
                 const previewElement = document.getElementById(`${page}-preview`);
-                const printElement = document.getElementById(`inside-right-print`);
+                const printElement = document.getElementById(`inside-left-print`);
                 
                 const textOverlay = document.createElement('div');
                 textOverlay.className = 'text-overlay';
