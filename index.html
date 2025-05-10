@@ -75,6 +75,7 @@
             padding: 10px;
             border: 1px solid #ddd;
             border-radius: 5px;
+            box-sizing: border-box; 
         }
 
         .form-group textarea {
@@ -118,16 +119,15 @@
         .card-page img {
             width: 100%;
             height: 100%;
-            object-fit: contain;
+            object-fit: contain; 
         }
 
         .card-page .text-overlay {
             position: absolute;
-            bottom: 20px;
-            left: 20px;
-            right: 20px;
             text-align: center;
             text-shadow: 0 0 3px white, 0 0 3px white, 0 0 3px white, 0 0 3px white;
+            box-sizing: border-box;
+            padding: 5px;
         }
 
         .buttons-container {
@@ -176,14 +176,14 @@
             .print-page {
                 page-break-after: always;
                 width: 100%;
-                height: 100vh;
+                height: 100vh; 
                 position: relative;
             }
 
             .card-section {
                 position: absolute;
-                width: 100%;
-                height: 50%;
+                width: 100%; 
+                height: 50%; 
                 box-shadow: none;
                 border: none;
                 overflow: hidden;
@@ -192,23 +192,32 @@
             /* Page 1 layout */
             .front-print {
                 top: 0;
-                transform: rotate(-90deg);
+                left: 50%; 
+                transform-origin: top left;
+                transform: rotate(-90deg) translateY(-100%);
             }
             
             .back-print {
-                bottom: 0;
-                transform: rotate(-90deg);
+                top: 50%; 
+                left: 50%;
+                transform-origin: top left;
+                transform: rotate(-90deg) translateY(-100%);
             }
             
             /* Page 2 layout */
-            .inside-left-print {
+            .inside-left-print { 
                 top: 0;
-                transform: rotate(-90deg);
+                left: 50%;
+                transform-origin: top left;
+                transform: rotate(-90deg) translateY(-100%);
             }
             
-            .inside-right-print {
-                bottom: 0;
-                transform: rotate(-90deg);
+            .inside-right-print {  
+                top: 50%;
+                left: 50%;
+                transform-origin: top left;
+                transform: rotate(-90deg) translateY(-100%);
+
             }
 
             .card-section img {
@@ -216,8 +225,16 @@
                 height: 100%;
                 object-fit: contain;
             }
+            
+            .card-section .text-overlay { 
+                 visibility: visible;
+                 border: none !important;
+                 resize: none !important;
+                 cursor: default !important;
+            }
 
-            .buttons-container, .tabs, .form-group, h1, .container {
+
+            .buttons-container, .tabs, .form-group label, .form-group input, .form-group textarea, h1, .container > h1, .container > .tabs, .container > .content-panel, .container > .spinner, .container > .buttons-container, .container > div[style*="margin-top: 20px"] {
                 display: none !important;
             }
         }
@@ -242,19 +259,27 @@
             <button onclick="generateImage('front')">Generate Front Cover</button>
         </div>
 
-        <div id="inside-left" class="content-panel">
+        <div id="inside-left" class="content-panel"> 
             <div class="form-group">
-                <label for="inside-left-prompt">Describe what you'd like on the inside right page:</label>
+                <label for="inside-left-prompt">Describe what you'd like on the inside right page (image background):</label>
                 <textarea id="inside-left-prompt" placeholder="E.g., Hearts and flowers frame">Hearts and flowers frame around a blank space for writing</textarea>
             </div>
             <div class="form-group">
                 <label for="message">Your message to mom:</label>
                 <textarea id="message" placeholder="Write your heartfelt message here...">Dear Mom, Thank you for your endless love and support. Happy Mother's Day!</textarea>
             </div>
+            <div class="form-group">
+                <label for="message-font-size">Font Size (e.g., 16px, 1.2em):</label>
+                <input type="text" id="message-font-size" value="16px">
+            </div>
+            <div class="form-group">
+                <label for="message-font-family">Font Family (e.g., Arial, Times New Roman):</label>
+                <input type="text" id="message-font-family" value="Arial">
+            </div>
             <button onclick="generateImage('inside-left')">Generate Inside Right Page</button>
         </div>
 
-        <div id="inside-right" class="content-panel">
+        <div id="inside-right" class="content-panel"> 
             <div class="form-group">
                 <label for="inside-right-prompt">Describe what you'd like on the inside left page:</label>
                 <textarea id="inside-right-prompt" placeholder="E.g., A mother and child holding hands">A mother and child holding hands walking through a garden</textarea>
@@ -274,16 +299,16 @@
 
         <div class="card-preview">
             <div class="card-page" id="front-preview">
-                <p style="text-align: center; color: #999;">Your front cover will appear here</p>
+                <p style="text-align: center; color: #999; padding-top: 50%;">Your front cover will appear here</p>
             </div>
-            <div class="card-page" id="inside-left-preview">
-                <p style="text-align: center; color: #999;">Your inside right page will appear here</p>
+            <div class="card-page" id="inside-left-preview"> 
+                <p style="text-align: center; color: #999; padding-top: 50%;">Your inside right page will appear here</p>
             </div>
-            <div class="card-page" id="inside-right-preview">
-                <p style="text-align: center; color: #999;">Your inside left page will appear here</p>
+            <div class="card-page" id="inside-right-preview"> 
+                <p style="text-align: center; color: #999; padding-top: 50%;">Your inside left page will appear here</p>
             </div>
             <div class="card-page" id="back-preview">
-                <p style="text-align: center; color: #999;">Your back cover will appear here</p>
+                <p style="text-align: center; color: #999; padding-top: 50%;">Your back cover will appear here</p>
             </div>
         </div>
 
@@ -295,11 +320,22 @@
         <div style="margin-top: 20px; padding: 15px; background: #f9f9f9; border-radius: 5px;">
             <h3>Printing Instructions:</h3>
             <ol>
-                <li>Click "Print Card" when you're happy with your design</li>
-                <li>In your browser's print dialog, select "double-sided" or "print on both sides"</li>
-                <li>Choose "flip on long edge" for proper page orientation</li>
-                <li>For best results, use card stock paper</li>
-                <li>After printing, fold the paper in half</li>
+                <li>Ensure all pages you want are generated.</li>
+                <li>Customize your message on the "Inside Right" page if desired.</li>
+                <li>Click "Print Card".</li>
+                <li>In your browser's print dialog:
+                    <ul>
+                        <li>Select your printer.</li>
+                        <li>Choose "Print on both sides" or "Two-sided".</li>
+                        <li>Select "Flip on long edge" (sometimes called "Booklet" or "Flip over").</li>
+                        <li>Ensure Layout is "Portrait".</li>
+                        <li>Paper size should match your card stock (e.g., Letter, A4).</li>
+                        <li>Margins: "Default" or "Minimum" often works well. Preview in the dialog.</li>
+                        <li>Scale: "Default" or "100%". Do NOT use "Fit to page" if it shrinks content.</li>
+                    </ul>
+                </li>
+                <li>For best results, use card stock paper.</li>
+                <li>After printing, fold the paper in half along the short edge.</li>
             </ol>
         </div>
     </div>
@@ -311,8 +347,8 @@
             <div class="card-section back-print" id="back-print"></div>
         </div>
         <div class="print-page" id="page-2">
-            <div class="card-section inside-left-print" id="inside-left-print"></div>
-            <div class="card-section inside-right-print" id="inside-right-print"></div>
+            <div class="card-section inside-left-print" id="inside-left-print"></div> 
+            <div class="card-section inside-right-print" id="inside-right-print"></div> 
         </div>
     </div>
 
@@ -331,120 +367,291 @@
             
             document.getElementById(tabName).classList.add("active");
             evt.currentTarget.classList.add("active");
+
+            if (tabName === 'inside-left') {
+                 updateAllMessageOverlays(); 
+            }
         }
 
         // Object to store generated images
         const cardImages = {
             front: null,
-            'inside-left': null,
-            'inside-right': null,
+            'inside-left': null, 
+            'inside-right': null, 
             back: null
         };
 
-        // Function to generate an image for a specific page
+        const messageTextarea = document.getElementById('message');
+        const fontSizeInput = document.getElementById('message-font-size');
+        const fontFamilyInput = document.getElementById('message-font-family');
+
+        let messageState = {
+            text: messageTextarea.value,
+            fontSize: fontSizeInput.value,
+            fontFamily: fontFamilyInput.value,
+            top: '50%', 
+            left: '10%',  
+            width: '80%', 
+            height: 'auto', 
+        };
+        
+        function applyMessageStateToElement(parentElement, isPrint = false) {
+            if (!parentElement) return;
+            
+            const placeholder = parentElement.querySelector('p');
+            if (placeholder) placeholder.remove();
+
+            let textOverlay = parentElement.querySelector('.text-overlay');
+            if (!textOverlay) {
+                textOverlay = document.createElement('div');
+                textOverlay.className = 'text-overlay';
+                parentElement.appendChild(textOverlay);
+
+                if (!isPrint && parentElement.id === 'inside-left-preview') {
+                    makeTextOverlayInteractive(textOverlay, parentElement);
+                }
+            }
+
+            textOverlay.innerHTML = messageState.text.replace(/\n/g, '<br>');
+            textOverlay.style.fontSize = messageState.fontSize;
+            textOverlay.style.fontFamily = messageState.fontFamily;
+            textOverlay.style.top = messageState.top;
+            textOverlay.style.left = messageState.left;
+            textOverlay.style.width = messageState.width;
+            textOverlay.style.height = messageState.height;
+
+            if (!isPrint && parentElement.id === 'inside-left-preview') {
+                 textOverlay.contentEditable = 'plaintext-only'; 
+                 textOverlay.style.border = '1px dashed #aaa';
+                 textOverlay.style.cursor = 'move';
+                 textOverlay.style.resize = 'both';
+                 textOverlay.style.overflow = 'auto'; 
+            } else {
+                 textOverlay.contentEditable = 'false';
+                 textOverlay.style.border = 'none';
+                 textOverlay.style.cursor = 'default';
+                 textOverlay.style.resize = 'none';
+                 textOverlay.style.overflow = 'hidden'; 
+            }
+        }
+
+        function updateAllMessageOverlays() {
+            messageState.text = messageTextarea.value;
+            messageState.fontSize = fontSizeInput.value;
+            messageState.fontFamily = fontFamilyInput.value;
+
+            const previewPage = document.getElementById('inside-left-preview');
+            const printPage = document.getElementById('inside-left-print'); 
+            
+            applyMessageStateToElement(previewPage, false);
+            applyMessageStateToElement(printPage, true);
+        }
+        
+        messageTextarea.addEventListener('input', () => {
+            messageState.text = messageTextarea.value;
+            updateAllMessageOverlays();
+        });
+        fontSizeInput.addEventListener('input', () => {
+            messageState.fontSize = fontSizeInput.value;
+            updateAllMessageOverlays();
+        });
+        fontFamilyInput.addEventListener('input', () => {
+            messageState.fontFamily = fontFamilyInput.value;
+            updateAllMessageOverlays();
+        });
+
+        function makeTextOverlayInteractive(overlayElement, parentPreviewElement) {
+            let isDragging = false;
+            let dragStartX, dragStartY, elementStartX, elementStartY;
+
+            overlayElement.addEventListener('mousedown', (e) => {
+                if (e.target !== overlayElement || window.getSelection().toString() !== '') {
+                     if (e.target === overlayElement && overlayElement.isContentEditable && document.activeElement !== overlayElement) {
+                     } else {
+                        return;
+                     }
+                }
+                
+                isDragging = true;
+                dragStartX = e.clientX;
+                dragStartY = e.clientY;
+                elementStartX = overlayElement.offsetLeft;
+                elementStartY = overlayElement.offsetTop;
+                
+                overlayElement.style.cursor = 'grabbing';
+            });
+
+            document.addEventListener('mousemove', (e) => {
+                if (!isDragging) return;
+                e.preventDefault(); 
+
+                let newX = elementStartX + (e.clientX - dragStartX);
+                let newY = elementStartY + (e.clientY - dragStartY);
+
+                const parentRect = parentPreviewElement.getBoundingClientRect();
+                const overlayRect = overlayElement.getBoundingClientRect();
+
+                newX = Math.max(0, Math.min(newX, parentRect.width - overlayRect.width));
+                newY = Math.max(0, Math.min(newY, parentRect.height - overlayRect.height));
+                
+                if (parentRect.width > 0) messageState.left = (newX / parentRect.width * 100) + '%';
+                if (parentRect.height > 0) messageState.top = (newY / parentRect.height * 100) + '%';
+                
+                overlayElement.style.left = messageState.left;
+                overlayElement.style.top = messageState.top;
+            });
+
+            document.addEventListener('mouseup', (e) => {
+                if (isDragging) {
+                    isDragging = false;
+                    overlayElement.style.cursor = 'move';
+                    updateAllMessageOverlays(); 
+                }
+            });
+
+            const resizeObserver = new ResizeObserver(entries => {
+                for (let entry of entries) {
+                    const parentRect = parentPreviewElement.getBoundingClientRect();
+                    if (parentRect.width > 0) {
+                        messageState.width = (entry.contentRect.width / parentRect.width * 100) + '%';
+                    }
+                    if (parentRect.height > 0) {
+                         messageState.height = (entry.contentRect.height / parentRect.height * 100) + '%';
+                    }
+                    const printPage = document.getElementById('inside-left-print');
+                    applyMessageStateToElement(printPage, true);
+                }
+            });
+            resizeObserver.observe(overlayElement);
+
+            overlayElement.addEventListener('input', (e) => {
+                let newText = e.target.innerHTML.replace(/<br\s*\/?>/gi, '\n');
+                newText = newText.replace(/<div>(.*?)<\/div>/gi, (match, p1) => p1 + '\n');
+                newText = newText.replace(/<p>(.*?)<\/p>/gi, (match, p1) => p1 + '\n');
+                newText = newText.replace(/&nbsp;/g, ' '); 
+                newText = newText.replace(/<[^>]+>/g, ''); 
+                
+                messageState.text = newText.trim();
+                if (messageTextarea.value !== messageState.text) {
+                     messageTextarea.value = messageState.text;
+                }
+                const printPage = document.getElementById('inside-left-print');
+                applyMessageStateToElement(printPage, true);
+            });
+        }
+
         async function generateImage(page) {
             const promptElement = document.getElementById(`${page}-prompt`);
             const prompt = promptElement.value.trim();
             
-            if (!prompt) {
+            if (!prompt && (page !== 'inside-left')) { 
                 alert("Please enter a description for the image.");
                 return;
             }
             
-            // Show loading spinner
             document.getElementById('spinner').style.display = 'block';
             
             try {
-                // Append black and white outline instruction to the prompt
-                const enhancedPrompt = prompt + ", black and white outline drawing, pen and ink style, no color, simple line art";
+                const enhancedPrompt = prompt ? prompt + ", black and white outline drawing, pen and ink style, no color, simple line art, coloring book style" : "subtle light gray floral pattern background, black and white outline drawing, pen and ink style, no color, simple line art";
                 
-                // Generate the image
                 const result = await websim.imageGen({
                     prompt: enhancedPrompt,
-                    aspect_ratio: "3:4",
+                    aspect_ratio: "3:4", 
                 });
                 
                 const imageUrl = result.url;
-                
-                // Store the image URL
                 cardImages[page] = imageUrl;
-                
-                // Update the preview
                 updatePreview(page, imageUrl);
                 
-                // If it's the inside right page, add the message
                 if (page === 'inside-left') {
-                    addMessageToImage(page);
+                    addMessageToImage(page); 
                 }
             } catch (error) {
                 console.error("Error generating image:", error);
                 alert("There was an error generating the image. Please try again.");
             } finally {
-                // Hide loading spinner
                 document.getElementById('spinner').style.display = 'none';
             }
         }
 
-        // Function to update the preview with the generated image
         function updatePreview(page, imageUrl) {
             const previewElement = document.getElementById(`${page}-preview`);
-            previewElement.innerHTML = `<img src="${imageUrl}" alt="${page} preview">`;
+            previewElement.innerHTML = `<img src="${imageUrl}" alt="${page} preview">`; 
             
-            // Also update the print version
-            const printElement = document.getElementById(`${page}-print`);
-            printElement.innerHTML = `<img src="${imageUrl}" alt="${page} print">`;
+            const printElementId = page === 'inside-left' ? 'inside-left-print' :
+                                 page === 'inside-right' ? 'inside-right-print' :
+                                 page === 'front' ? 'front-print' : 'back-print';
+            const printElement = document.getElementById(printElementId);
+            if (printElement) {
+                printElement.innerHTML = `<img src="${imageUrl}" alt="${page} print">`;
+            }
         }
-
-        // Function to add the message to the inside right page
+        
         function addMessageToImage(page) {
             if (page === 'inside-left') {
-                const message = document.getElementById('message').value;
-                const previewElement = document.getElementById(`${page}-preview`);
-                const printElement = document.getElementById(`inside-left-print`);
+                const previewElement = document.getElementById('inside-left-preview');
+                const img = previewElement.querySelector('img');
                 
-                const textOverlay = document.createElement('div');
-                textOverlay.className = 'text-overlay';
-                textOverlay.innerHTML = message.replace(/\n/g, '<br>');
-                
-                previewElement.appendChild(textOverlay.cloneNode(true));
-                printElement.appendChild(textOverlay);
-            }
-        }
+                const setupTextOverlays = () => {
+                    const oldOverlayPreview = previewElement.querySelector('.text-overlay');
+                    if (oldOverlayPreview) oldOverlayPreview.remove();
+                    
+                    const printContainer = document.getElementById('inside-left-print');
+                    const oldOverlayPrint = printContainer.querySelector('.text-overlay');
+                    if (oldOverlayPrint) oldOverlayPrint.remove();
 
-        // Function to generate all images
-        async function generateAllImages() {
-            await generateImage('front');
-            await generateImage('inside-left');
-            await generateImage('inside-right');
-            await generateImage('back');
-        }
+                    updateAllMessageOverlays();
+                };
 
-        // Function to print the card
-        function printCard() {
-            // Check if all images have been generated
-            const missingPages = [];
-            for (const page in cardImages) {
-                if (!cardImages[page]) {
-                    missingPages.push(page.replace('-', ' '));
+                if (img) { 
+                    if (img.complete) {
+                        setupTextOverlays();
+                    } else {
+                        img.onload = setupTextOverlays;
+                        img.onerror = setupTextOverlays; 
+                    }
+                } else { 
+                     setupTextOverlays();
                 }
             }
-            
-            if (missingPages.length > 0) {
-                alert(`Please generate images for the following pages first: ${missingPages.join(', ')}`);
-                return;
-            }
-            
-            // Make the print div visible
-            document.querySelector('.print-card').style.display = 'block';
-            
-            // Print the document
-            window.print();
-            
-            // Hide the print div again after printing
-            setTimeout(() => {
-                document.querySelector('.print-card').style.display = 'none';
-            }, 1000);
         }
+
+        async function generateAllImages() {
+            document.getElementById('generate-all').disabled = true;
+            await generateImage('front');
+            await generateImage('inside-left'); 
+            await generateImage('inside-right'); 
+            await generateImage('back');
+            document.getElementById('generate-all').disabled = false;
+        }
+
+        function printCard() {
+            const missingPagesForAlert = [];
+            if (!cardImages['front']) missingPagesForAlert.push("Front Cover");
+            if (!cardImages['inside-right']) missingPagesForAlert.push("Inside Left Page");
+            if (!cardImages['back']) missingPagesForAlert.push("Back Cover");
+            
+            if (missingPagesForAlert.length > 0) {
+                alert(`For a complete card, please generate images for: ${missingPagesForAlert.join(', ')}.\nYou can still print, but these pages will be blank or just text.`);
+            }
+
+            updateAllMessageOverlays();
+            
+            document.querySelector('.print-card').style.display = 'block';
+            window.print();
+             setTimeout(() => {
+                 document.querySelector('.print-card').style.display = 'none';
+             }, 500); 
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if (document.getElementById('inside-left').classList.contains('active')) {
+                updateAllMessageOverlays();
+            } else {
+                const printPage = document.getElementById('inside-left-print');
+                applyMessageStateToElement(printPage, true);
+            }
+        });
     </script>
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js/v8c78df7c7c0f484497ecbca7046644da1771523124516" integrity="sha512-8DS7rgIrAmghBFwoOTujcf6D9rXvH8xm8JQ1Ja01h9QX8EzXldiszufYa4IFfKdLUKTTrnSFXLDkUEOTrZQ8Qg==" data-cf-beacon='{"version":"2024.11.0","token":"4c6229722a6346bc8eb5cb0e5eae5d41","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
 </body>
