@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mother's Day Card Generator</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        h1 {
+            color: #e84c93;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e84c93;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            background: #f5f5f5;
+            border: none;
+            border-radius: 5px 5px 0 0;
+            margin-right: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .tab.active {
+            background: #e84c93;
+            color: white;
+        }
+
+        .content-panel {
+            display: none;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 0 0 5px 5px;
+        }
+
+        .content-panel.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .form-group textarea {
+            height: 100px;
+            resize: vertical;
+        }
+
+        button {
+            background: #e84c93;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background: #d63a7f;
+        }
+
+        .card-preview {
+            margin-top: 30px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .card-page {
+            width: 400px;
+            height: 550px;
+            border: 1px solid #ddd;
+            background: white;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-page img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .card-page .text-overlay {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            text-align: center;
+            text-shadow: 0 0 3px white, 0 0 3px white, 0 0 3px white, 0 0 3px white;
+        }
+
+        .buttons-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-radius: 50%;
+            border-top: 4px solid #e84c93;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            display: none;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Print Styles */
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+
+            .print-card, .print-card * {
+                visibility: visible;
+            }
+
+            .print-card {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+
+            .page1, .page4 {
+                page-break-after: always;
+            }
+
+            .card-page {
+                box-shadow: none;
+                border: none;
+                width: 100%;
+                height: 100vh;
+            }
+
+            .buttons-container, .tabs, .form-group, h1, .container {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Mother's Day Card Generator</h1>
+
+        <div class="tabs">
+            <button class="tab active" onclick="openTab(event, 'front-page')">Front Cover</button>
+            <button class="tab" onclick="openTab(event, 'inside-left')">Inside Left</button>
+            <button class="tab" onclick="openTab(event, 'inside-right')">Inside Right</button>
+            <button class="tab" onclick="openTab(event, 'back-page')">Back Cover</button>
+        </div>
+
+        <div id="front-page" class="content-panel active">
+            <div class="form-group">
+                <label for="front-prompt">Describe what you'd like on the front cover:</label>
+                <textarea id="front-prompt" placeholder="E.g., A bouquet of flowers with 'Happy Mother's Day' text">A beautiful bouquet of roses and lilies with "Happy Mother's Day" text</textarea>
+            </div>
+            <button onclick="generateImage('front')">Generate Front Cover</button>
+        </div>
+
+        <div id="inside-left" class="content-panel">
+            <div class="form-group">
+                <label for="inside-left-prompt">Describe what you'd like on the inside left page:</label>
+                <textarea id="inside-left-prompt" placeholder="E.g., A mother and child holding hands">A mother and child holding hands walking through a garden</textarea>
+            </div>
+            <button onclick="generateImage('inside-left')">Generate Inside Left Page</button>
+        </div>
+
+        <div id="inside-right" class="content-panel">
+            <div class="form-group">
+                <label for="inside-right-prompt">Describe what you'd like on the inside right page:</label>
+                <textarea id="inside-right-prompt" placeholder="E.g., Hearts and flowers frame">Hearts and flowers frame around a blank space for writing</textarea>
+            </div>
+            <div class="form-group">
+                <label for="message">Your message to mom:</label>
+                <textarea id="message" placeholder="Write your heartfelt message here...">Dear Mom, Thank you for your endless love and support. Happy Mother's Day!</textarea>
+            </div>
+            <button onclick="generateImage('inside-right')">Generate Inside Right Page</button>
+        </div>
+
+        <div id="back-page" class="content-panel">
+            <div class="form-group">
+                <label for="back-prompt">Describe what you'd like on the back cover:</label>
+                <textarea id="back-prompt" placeholder="E.g., Simple pattern with small text">Simple floral pattern with small 'Made with love' text</textarea>
+            </div>
+            <button onclick="generateImage('back')">Generate Back Cover</button>
+        </div>
+
+        <div class="spinner" id="spinner"></div>
+
+        <div class="card-preview">
+            <div class="card-page" id="front-preview">
+                <p style="text-align: center; color: #999;">Your front cover will appear here</p>
+            </div>
+            <div class="card-page" id="inside-left-preview">
+                <p style="text-align: center; color: #999;">Your inside left page will appear here</p>
+            </div>
+            <div class="card-page" id="inside-right-preview">
+                <p style="text-align: center; color: #999;">Your inside right page will appear here</p>
+            </div>
+            <div class="card-page" id="back-preview">
+                <p style="text-align: center; color: #999;">Your back cover will appear here</p>
+            </div>
+        </div>
+
+        <div class="buttons-container">
+            <button id="generate-all" onclick="generateAllImages()">Generate All Pages</button>
+            <button id="print-button" onclick="printCard()">Print Card</button>
+        </div>
+
+        <div style="margin-top: 20px; padding: 15px; background: #f9f9f9; border-radius: 5px;">
+            <h3>Printing Instructions:</h3>
+            <ol>
+                <li>Click "Print Card" when you're happy with your design</li>
+                <li>In your browser's print dialog, select "double-sided" or "print on both sides"</li>
+                <li>Choose "flip on long edge" for proper page orientation</li>
+                <li>For best results, use card stock paper</li>
+                <li>After printing, fold the paper in half</li>
+            </ol>
+        </div>
+    </div>
+
+    <!-- Print-specific div that will only show when printing -->
+    <div class="print-card" style="display: none;">
+        <div class="card-page page4" id="back-print"></div>
+        <div class="card-page page3" id="inside-right-print"></div>
+        <div class="card-page page2" id="inside-left-print"></div>
+        <div class="card-page page1" id="front-print"></div>
+    </div>
+
+    <script>
+        // Tab functionality
+        function openTab(evt, tabName) {
+            const contentPanels = document.getElementsByClassName("content-panel");
+            for (let i = 0; i < contentPanels.length; i++) {
+                contentPanels[i].classList.remove("active");
+            }
+            
+            const tabs = document.getElementsByClassName("tab");
+            for (let i = 0; i < tabs.length; i++) {
+                tabs[i].classList.remove("active");
+            }
+            
+            document.getElementById(tabName).classList.add("active");
+            evt.currentTarget.classList.add("active");
+        }
+
+        // Object to store generated images
+        const cardImages = {
+            front: null,
+            'inside-left': null,
+            'inside-right': null,
+            back: null
+        };
+
+        // Function to generate an image for a specific page
+        async function generateImage(page) {
+            const promptElement = document.getElementById(`${page}-prompt`);
+            const prompt = promptElement.value.trim();
+            
+            if (!prompt) {
+                alert("Please enter a description for the image.");
+                return;
+            }
+            
+            // Show loading spinner
+            document.getElementById('spinner').style.display = 'block';
+            
+            try {
+                // Generate the image
+                const result = await websim.imageGen({
+                    prompt: prompt,
+                    aspect_ratio: "3:4",
+                });
+                
+                const imageUrl = result.url;
+                
+                // Process the image to create an outline version
+                const outlineImageUrl = await createOutlineImage(imageUrl);
+                
+                // Store the image URL
+                cardImages[page] = outlineImageUrl;
+                
+                // Update the preview
+                updatePreview(page, outlineImageUrl);
+                
+                // If it's the inside right page, add the message
+                if (page === 'inside-right') {
+                    addMessageToImage(page);
+                }
+            } catch (error) {
+                console.error("Error generating image:", error);
+                alert("There was an error generating the image. Please try again.");
+            } finally {
+                // Hide loading spinner
+                document.getElementById('spinner').style.display = 'none';
+            }
+        }
+
+        // Function to create an outline version of the image
+        async function createOutlineImage(imageUrl) {
+            return new Promise((resolve, reject) => {
+                const img = new Image();
+                img.crossOrigin = "Anonymous";
+                img.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+                    
+                    // Set canvas dimensions to match the image
+                    canvas.width = img.width;
+                    canvas.height = img.height;
+                    
+                    // Draw the original image
+                    ctx.drawImage(img, 0, 0);
+                    
+                    // Get image data
+                    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                    const data = imageData.data;
+                    
+                    // Convert to grayscale and increase contrast for outline effect
+                    for (let i = 0; i < data.length; i += 4) {
+                        // Convert to grayscale
+                        const avg = (data[i] + data[i + 1] + data[i + 2]) / 3;
+                        
+                        // Apply edge detection / outline effect
+                        // This is a simple version - just making it black and white with high contrast
+                        const value = avg > 190 ? 255 : 0;
+                        
+                        // Set RGB values to the same value for grayscale
+                        data[i] = value;     // R
+                        data[i + 1] = value; // G
+                        data[i + 2] = value; // B
+                        // Alpha channel remains unchanged
+                    }
+                    
+                    // Put the modified image data back on the canvas
+                    ctx.putImageData(imageData, 0, 0);
+                    
+                    // Convert canvas to data URL
+                    resolve(canvas.toDataURL('image/png'));
+                };
+                
+                img.onerror = function() {
+                    reject(new Error('Failed to load image'));
+                };
+                
+                img.src = imageUrl;
+            });
+        }
+
+        // Function to update the preview with the generated image
+        function updatePreview(page, imageUrl) {
+            const previewElement = document.getElementById(`${page}-preview`);
+            previewElement.innerHTML = `<img src="${imageUrl}" alt="${page} preview">`;
+            
+            // Also update the print version
+            const printElement = document.getElementById(`${page}-print`);
+            printElement.innerHTML = `<img src="${imageUrl}" alt="${page} print">`;
+        }
+
+        // Function to add the message to the inside right page
+        function addMessageToImage(page) {
+            if (page === 'inside-right') {
+                const message = document.getElementById('message').value;
+                const previewElement = document.getElementById(`${page}-preview`);
+                const printElement = document.getElementById(`${page}-print`);
+                
+                const textOverlay = document.createElement('div');
+                textOverlay.className = 'text-overlay';
+                textOverlay.innerHTML = message.replace(/\n/g, '<br>');
+                
+                previewElement.appendChild(textOverlay.cloneNode(true));
+                printElement.appendChild(textOverlay);
+            }
+        }
+
+        // Function to generate all images
+        async function generateAllImages() {
+            await generateImage('front');
+            await generateImage('inside-left');
+            await generateImage('inside-right');
+            await generateImage('back');
+        }
+
+        // Function to print the card
+        function printCard() {
+            // Check if all images have been generated
+            const missingPages = [];
+            for (const page in cardImages) {
+                if (!cardImages[page]) {
+                    missingPages.push(page.replace('-', ' '));
+                }
+            }
+            
+            if (missingPages.length > 0) {
+                alert(`Please generate images for the following pages first: ${missingPages.join(', ')}`);
+                return;
+            }
+            
+            // Make the print div visible
+            document.querySelector('.print-card').style.display = 'block';
+            
+            // Print the document
+            window.print();
+            
+            // Hide the print div again after printing
+            setTimeout(() => {
+                document.querySelector('.print-card').style.display = 'none';
+            }, 1000);
+        }
+    </script>
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v8c78df7c7c0f484497ecbca7046644da1771523124516" integrity="sha512-8DS7rgIrAmghBFwoOTujcf6D9rXvH8xm8JQ1Ja01h9QX8EzXldiszufYa4IFfKdLUKTTrnSFXLDkUEOTrZQ8Qg==" data-cf-beacon='{"version":"2024.11.0","token":"4c6229722a6346bc8eb5cb0e5eae5d41","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
+</body>
+</html>
+
